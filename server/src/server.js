@@ -2,7 +2,13 @@ import express from "express";
 import { config } from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { serve } from "inngest/express";
+import { inngest } from "./inngest/client.js";
+import { userRegister } from "./inngest/functions/user.inngest.js";
+import { ticketCreated } from "./inngest/functions/ticket.inngest.js";
 import { connectDB } from "./config/db.js";
+import userRouter from "./routes/user.routes.js";
+import ticketRouter from "./routes/ticket.routes.js";
 
 const app = express();
 config();
@@ -19,8 +25,17 @@ app.get("/", (_, res) => {
     version: "1.0.0",
     author: "Surajit",
     github: "https://github.com/surajit20107",
-  })
+  });
 });
+app.use("/api/users", userRouter);
+app.use("/api/tickets", ticketRouter);
+app.use(
+  "/api/inngest",
+  serve({
+    client: inngest,
+    functions: [userRegister, ticketCreated],
+  }),
+);
 
 connectDB()
   .then(() => {

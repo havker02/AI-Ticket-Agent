@@ -12,7 +12,7 @@ export const sendMail = async (to, subject, body) => {
       },
     });
 
-    const info = await transporter.sendMail({
+    const info = transporter.sendMail({
       from: "AI Ticket",
       to,
       subject,

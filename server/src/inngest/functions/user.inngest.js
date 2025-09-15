@@ -1,6 +1,6 @@
 import { inngest } from "../client.js";
-import { nonRetryableError } from "inngest";
-import { sendMail } from "./mail.lib.js";
+import { NonRetriableError } from "inngest";
+import { sendMail } from "../../lib/mail.lib.js";
 
 export const userRegister = inngest.createFunction(
   { id: "user-register", retries: 2 },
@@ -10,7 +10,7 @@ export const userRegister = inngest.createFunction(
       const { email, name } = event.data;
 
       if (!email || !name) {
-        throw nonRetryableError("Missing required fields");
+        throw new NonRetriableError("Missing required fields");
       }
 
       await step.run("send-welcome-email", async () => {

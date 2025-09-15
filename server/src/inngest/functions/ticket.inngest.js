@@ -1,9 +1,9 @@
 import { inngest } from "../client.js";
-import { nonRetryableError } from "inngest";
+import { NonRetriableError } from "inngest";
 import { Ticket } from "../../models/ticket.model.js";
 import { User } from "../../models/user.model.js";
 import { processTicket } from "../../lib/agent.lib.js";
-import { sendMail } from "./mail.lib.js";
+import { sendMail } from "../../lib/mail.lib.js";
 
 export const ticketCreated = inngest.createFunction(
   { id: "ticket-created", retries: 2 },
@@ -13,7 +13,7 @@ export const ticketCreated = inngest.createFunction(
       const { ticket } = event.data;
 
       if (!ticket) {
-        throw nonRetryableError("Ticket ID is required");
+        throw new NonRetriableError("Ticket ID is required");
       }
 
       await step.run("update-ticket", async () => {
