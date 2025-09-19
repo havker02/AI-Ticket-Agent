@@ -71,16 +71,16 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const { error } = loginSchema.safeParse({ email, password });
+    const parsed = loginSchema.safeParse({ email, password });
 
-    if (error) {
+    if (!parsed.success) {
       return res.status(400).json({
         success: false,
         message: error,
       });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       return res.status(400).json({
@@ -105,12 +105,13 @@ export const loginUser = async (req, res) => {
       secure: true,
       sameSite: "none",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
     return res.status(200).json({
       success: true,
       message: "User logged in successfully",
+      token,
     });
   } catch (error) {
     console.error(error.message);
