@@ -1,5 +1,5 @@
-
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const CreateTicket = () => {
   const [formData, setFormData] = useState({
@@ -84,13 +84,17 @@ const CreateTicket = () => {
       <div className="bg-base-100 shadow-sm border-b">
         <div className="container mx-auto px-4 py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-            <button className="btn btn-ghost btn-sm self-start">
+              <div>
+                <Link to="/">
+                  <button className="flex btn btn-ghost btn-sm self-start">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
               <span className="hidden sm:inline">Back to Tickets</span>
               <span className="sm:hidden">Back</span>
             </button>
+                </Link>
+              </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-base-content">Create New Ticket</h1>
               <p className="text-sm sm:text-base text-base-content/70 mt-1">Submit a support request for assistance</p>
@@ -119,8 +123,8 @@ const CreateTicket = () => {
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder="Enter a brief, descriptive title for your issue"
-                  className={`input input-bordered w-full ${errors.title ? 'input-error' : ''}`}
+                  placeholder="Ticket Title..."
+                  className={`input input-bordered w-full placeholder:text-gray-400 ${errors.title ? 'input-error' : ''}`}
                   maxLength={50}
                 />
                 {errors.title && (
@@ -128,11 +132,7 @@ const CreateTicket = () => {
                     <span className="label-text-alt text-error">{errors.title}</span>
                   </label>
                 )}
-                <label className="label">
-                  <span className="label-text-alt text-base-content/60">
-                    Be specific and concise. This helps our support team understand your issue quickly.
-                  </span>
-                </label>
+                
               </div>
 
               {/* Description Field */}
@@ -149,8 +149,8 @@ const CreateTicket = () => {
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  placeholder="Provide detailed information about your issue, including steps to reproduce, expected behavior, and any error messages you've encountered"
-                  className={`textarea textarea-bordered h-24 sm:h-32 w-full ${errors.description ? 'textarea-error' : ''}`}
+                  placeholder="Ticket Description..."
+                  className={`textarea textarea-bordered h-24 sm:h-32 w-full resize-none placeholder:text-gray-400 ${errors.description ? 'textarea-error' : ''}`}
                   maxLength={200}
                 />
                 {errors.description && (
@@ -158,11 +158,7 @@ const CreateTicket = () => {
                     <span className="label-text-alt text-error">{errors.description}</span>
                   </label>
                 )}
-                <label className="label">
-                  <span className="label-text-alt text-base-content/60">
-                    Include as much relevant detail as possible to help us resolve your issue efficiently.
-                  </span>
-                </label>
+                
               </div>
 
               {/* Submit Button */}

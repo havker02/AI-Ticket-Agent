@@ -1,5 +1,5 @@
-
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -41,8 +41,8 @@ const Register = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Enter your full name"
-                className="input input-bordered w-full focus:input-secondary"
+                placeholder="John Doe"
+                className="input input-bordered w-full focus:input-secondary placeholder:text-gray-400"
                 required
               />
             </div>
@@ -56,8 +56,8 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
-                className="input input-bordered w-full focus:input-secondary"
+                placeholder="john@example.com"
+                className="input input-bordered w-full focus:input-secondary placeholder:text-gray-400"
                 required
               />
             </div>
@@ -71,8 +71,8 @@ const Register = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Create a password"
-                className="input input-bordered w-full focus:input-secondary"
+                placeholder="Your Password"
+                className="input input-bordered w-full focus:input-secondary placeholder:text-gray-400"
                 required
               />
             </div>
@@ -86,8 +86,8 @@ const Register = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                placeholder="Confirm your password"
-                className="input input-bordered w-full focus:input-secondary"
+                placeholder="Confirm Your Password"
+                className="input input-bordered w-full focus:input-secondary placeholder:text-gray-400"
                 required
               />
             </div>
@@ -95,7 +95,7 @@ const Register = () => {
             <div className="form-control">
               <label className="cursor-pointer label justify-start space-x-3">
                 <input type="checkbox" className="checkbox checkbox-secondary" required />
-                <span className="label-text text-sm">
+                  <span className="label-text flex flex-wrap text-sm">
                   I agree to the{' '}
                   <a href="#" className="link link-secondary">Terms of Service</a>
                   {' '}and{' '}
@@ -116,9 +116,9 @@ const Register = () => {
           <div className="text-center">
             <p className="text-gray-600">
               Already have an account?{' '}
-              <a href="/login" className="link link-secondary font-medium">
+              <Link to="/login" className="link link-secondary font-medium">
                 Sign in
-              </a>
+              </Link>
             </p>
           </div>
 

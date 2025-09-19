@@ -5,7 +5,7 @@ interface Ticket {
   _id: string;
   title: string;
   description: string;
-  status: 'open' | 'in-progress' | 'closed';
+  status: 'opened' | 'progress' | 'resolved';
   createdBy: {
     _id: string;
     name: string;
@@ -31,7 +31,7 @@ const Tickets = () => {
       _id: '1',
       title: 'Login page not responsive on mobile',
       description: 'The login form breaks on smaller screen sizes and buttons are not clickable.',
-      status: 'open',
+      status: 'opened',
       createdBy: {
         _id: 'currentUser',
         name: 'John Doe',
@@ -48,7 +48,7 @@ const Tickets = () => {
       _id: '2',
       title: 'Add dark mode toggle',
       description: 'Users have requested a dark mode option for better viewing experience during night time.',
-      status: 'in-progress',
+      status: 'resolved',
       createdBy: {
         _id: 'currentUser',
         name: 'John Doe',
@@ -69,7 +69,7 @@ const Tickets = () => {
       _id: '3',
       title: 'Improve search functionality',
       description: 'Search results are not accurate and take too long to load. Need better filtering options.',
-      status: 'closed',
+      status: 'progress',
       createdBy: {
         _id: 'currentUser',
         name: 'John Doe',
@@ -93,9 +93,9 @@ const Tickets = () => {
 
   const getStatusBadge = (status: string) => {
     const statusClasses = {
-      'open': 'badge-error',
-      'in-progress': 'badge-warning',
-      'closed': 'badge-success'
+      'opened': 'badge-error',
+      'progress': 'badge-warning',
+      'resolved': 'badge-success'
     };
     return `badge ${statusClasses[status as keyof typeof statusClasses] || 'badge-neutral'}`;
   };
@@ -139,9 +139,7 @@ const Tickets = () => {
               <h1 className="text-3xl font-bold text-base-content">My Tickets</h1>
               <p className="text-base-content/70 mt-1">View and track your support requests</p>
             </div>
-            <Link to="/create" className="bg-red-500"
-              >
-            
+            <Link to="/create">
             <button className="btn btn-primary">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -161,15 +159,15 @@ const Tickets = () => {
           </div>
           <div className="stat bg-base-100 rounded-lg shadow-sm">
             <div className="stat-title">Open</div>
-            <div className="stat-value text-error">{tickets.filter(t => t.status === 'open').length}</div>
+            <div className="stat-value text-error">{tickets.filter(t => t.status === 'opened').length}</div>
           </div>
           <div className="stat bg-base-100 rounded-lg shadow-sm">
             <div className="stat-title">In Progress</div>
-            <div className="stat-value text-warning">{tickets.filter(t => t.status === 'in-progress').length}</div>
+            <div className="stat-value text-warning">{tickets.filter(t => t.status === 'resolved').length}</div>
           </div>
           <div className="stat bg-base-100 rounded-lg shadow-sm">
             <div className="stat-title">Resolved</div>
-            <div className="stat-value text-success">{tickets.filter(t => t.status === 'closed').length}</div>
+            <div className="stat-value text-success">{tickets.filter(t => t.status === 'resolved').length}</div>
           </div>
         </div>
 
@@ -183,9 +181,9 @@ const Tickets = () => {
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
                 <option value="all">All Status</option>
-                <option value="open">Open</option>
-                <option value="in-progress">In Progress</option>
-                <option value="closed">Resolved</option>
+                <option value="opened">Open</option>
+                <option value="progress">In Progress</option>
+                <option value="resolved">Resolved</option>
               </select>
             </div>
             <div className="form-control">
@@ -225,7 +223,7 @@ const Tickets = () => {
                         {ticket.title}
                       </h3>
                       <span className={getStatusBadge(ticket.status)}>
-                        {ticket.status === 'in-progress' ? 'In Progress' : ticket.status === 'closed' ? 'Resolved' : 'Open'}
+                        {ticket.status === 'opened' ? 'Progress' : ticket.status === 'resolved' ? 'Resolved' : 'Opened'}
                       </span>
                       <span className={getPriorityBadge(ticket.priority)}>
                         {ticket.priority}
@@ -263,16 +261,19 @@ const Tickets = () => {
                       </div>
                     )}
                   </div>
-
-                  <div className="flex gap-2">
+                  
+                  {/*
+                  <div className="flex gap-1">
                     <button className="btn btn-outline btn-sm">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
-                      View Details
+                      {View}
                     </button>
                   </div>
+                  */}
+                  
                 </div>
               </div>
             </div>

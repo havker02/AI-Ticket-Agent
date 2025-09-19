@@ -1,5 +1,5 @@
-
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -39,8 +39,8 @@ const Login = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
-                className="input input-bordered w-full focus:input-primary"
+                placeholder="john@example.com"
+                className="input input-bordered w-full focus:input-primary placeholder:text-gray-400"
                 required
               />
             </div>
@@ -55,7 +55,7 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter your password"
-                className="input input-bordered w-full focus:input-primary"
+                className="input input-bordered w-full focus:input-primary placeholder:text-gray-400"
                 required
               />
               <label className="label">
@@ -66,7 +66,7 @@ const Login = () => {
             </div>
 
             <div className="form-control mt-6">
-              <button type="submit" className="btn btn-primary w-full">
+                <button type="submit" className="btn btn-primary w-full">
                 Sign In
               </button>
             </div>
@@ -77,9 +77,9 @@ const Login = () => {
           <div className="text-center">
             <p className="text-gray-600">
               Don't have an account?{' '}
-              <a href="/register" className="link link-primary font-medium">
+              <Link to="/register" className="link link-primary font-medium">
                 Sign up
-              </a>
+              </Link>
             </p>
           </div>
 
