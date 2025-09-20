@@ -26,6 +26,7 @@ interface Ticket {
 
 const Tickets = () => {
   // Dummy data for user's own tickets only
+  
   const [tickets] = useState<Ticket[]>([
     {
       _id: '1',
@@ -87,6 +88,7 @@ const Tickets = () => {
     }
   ]);
 
+
   const [statusFilter, setStatusFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -141,11 +143,12 @@ const Tickets = () => {
             </div>
             <Link to="/create">
             <button className="btn btn-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Create Ticket
-            </button> </Link>
+              Create
+            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -304,7 +307,9 @@ const Tickets = () => {
             <div className="text-6xl mb-4">🎫</div>
             <h3 className="text-xl font-semibold mb-2">No tickets yet</h3>
             <p className="text-base-content/60 mb-4">Create your first support ticket to get help with any issues.</p>
-            <button className="btn btn-primary">Create Your First Ticket</button>
+            <Link to="/create">
+              <button className="btn btn-primary">Create Your First Ticket</button>
+            </Link>
           </div>
         )}
       </div>
