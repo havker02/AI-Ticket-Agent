@@ -35,8 +35,7 @@ const Ticket = () => {
   const deleteTicket = async (id: string) => {
     try {
       const res = await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/api/tickets
-      /${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/tickets/${id}`,
         {
           withCredentials: true,
         },
@@ -123,7 +122,7 @@ const Ticket = () => {
       </div>
     );
   }
-  console.log(ticket?._id);
+
   if (!ticket) {
     return (
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
@@ -287,7 +286,7 @@ const Ticket = () => {
               <div className="space-y-2">
                 <button
                   className="btn btn-outline btn-sm w-full text-error"
-                  onClick={deleteTicket(ticket._id)}
+                  onClick={() => deleteTicket(ticket._id)}
                 >
                   Delete Ticket
                 </button>

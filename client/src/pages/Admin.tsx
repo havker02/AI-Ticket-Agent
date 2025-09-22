@@ -85,14 +85,11 @@ const Admin = () => {
   }, []);
 
   // Update ticket status
-  const updateTicketStatus = async (ticketId: string, status: string) => {
+  const updateTicketStatus = async (ticketId: string) => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.patch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/tickets/${ticketId}`,
-        { status },
+      await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/tickets/update/${ticketId}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         },
       );
@@ -207,13 +204,15 @@ const Admin = () => {
         <div className="tabs tabs-boxed w-fit mb-6">
           <button
             className={`tab ${activeTab === "tickets" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("tickets")}>
+            onClick={() => setActiveTab("tickets")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 mr-2"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor">
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -225,13 +224,15 @@ const Admin = () => {
           </button>
           <button
             className={`tab ${activeTab === "users" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("users")}>
+            onClick={() => setActiveTab("users")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 mr-2"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor">
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -342,35 +343,10 @@ const Admin = () => {
                             >
                               <li>
                                 <button
-                                  onClick={() =>
-                                    updateTicketStatus(ticket._id, "open")
-                                  }
-                                  className="text-error"
-                                >
-                                  Mark as Open
-                                </button>
-                              </li>
-                              <li>
-                                <button
-                                  onClick={() =>
-                                    updateTicketStatus(
-                                      ticket._id,
-                                      "in-progress",
-                                    )
-                                  }
-                                  className="text-warning"
-                                >
-                                  Mark as In Progress
-                                </button>
-                              </li>
-                              <li>
-                                <button
-                                  onClick={() =>
-                                    updateTicketStatus(ticket._id, "resolved")
-                                  }
+                                  onClick={() => updateTicketStatus(ticket._id)}
                                   className="text-success"
                                 >
-                                  Mark as Resolved
+                                  Mark as resolved
                                 </button>
                               </li>
                             </ul>

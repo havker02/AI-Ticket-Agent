@@ -177,3 +177,36 @@ export const deleteTicket = async (req, res) => {
     });
   }
 };
+
+export const toggleTicketStatus = async (req, res) => {
+  const ticketId = req.params.id;
+  try {
+    if (req.user.role === "user") {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to perform this action",
+      });
+    }
+
+    const ticket = await Ticket.findByIdAndUpdate(
+      ticketId,
+      {
+        status: "resolved",
+      },
+      { new: true },
+    );
+
+    if (!ticket) {
+      return res.status(404).json({
+        success: false,
+        message: "Ticket not found",
+      });
+    }
+  } catch (error) {
+    console.error("Error while changing ticket status", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
