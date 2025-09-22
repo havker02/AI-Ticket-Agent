@@ -210,8 +210,8 @@ const Tickets = () => {
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-base-content hover:text-primary cursor-pointer">
-                        {ticket.title}
+                      <h3 className="text-lg font-semibold text-base-content hover:text-primary cursor-pointer text-blue-500">
+                        <Link to={`/ticket/${ticket._id}`}>{ticket.title}</Link>
                       </h3>
                       <span className={getStatusBadge(ticket.status)}>
                         {ticket.status === "open"

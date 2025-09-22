@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -33,6 +32,23 @@ const Ticket = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const deleteTicket = async (id: string) => {
+    try {
+      const res = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/tickets
+      /${id}`,
+        {
+          withCredentials: true,
+        },
+      );
+      if (res.status === 200) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const fetchTicket = async () => {
     try {
       setLoading(true);
@@ -40,7 +56,7 @@ const Ticket = () => {
         `${import.meta.env.VITE_BACKEND_URL}/api/tickets/${id}`,
         {
           withCredentials: true,
-        }
+        },
       );
       setTicket(res.data?.ticket);
       setError(null);
@@ -100,26 +116,20 @@ const Ticket = () => {
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
         <div className="text-center">
           <div className="text-error text-xl mb-4">⚠️ {error}</div>
-          <button 
-            onClick={() => navigate("/")} 
-            className="btn btn-primary"
-          >
+          <button onClick={() => navigate("/")} className="btn btn-primary">
             Back to Tickets
           </button>
         </div>
       </div>
     );
   }
-
+  console.log(ticket?._id);
   if (!ticket) {
     return (
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
         <div className="text-center">
           <div className="text-xl mb-4">Ticket not found</div>
-          <button 
-            onClick={() => navigate("/")} 
-            className="btn btn-primary"
-          >
+          <button onClick={() => navigate("/")} className="btn btn-primary">
             Back to Tickets
           </button>
         </div>
@@ -133,19 +143,27 @@ const Ticket = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={() => navigate("/")}
               className="btn btn-ghost btn-sm"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
               Back to Tickets
             </button>
             <h1 className="text-2xl font-bold">Ticket Details</h1>
-          </div>
-          <div className="text-sm text-base-content/60">
-            ID: {ticket._id}
           </div>
         </div>
 
@@ -166,7 +184,7 @@ const Ticket = () => {
                   </span>
                 </div>
               </div>
-              
+
               {/* Description */}
               <div className="prose prose-sm max-w-none">
                 <h3 className="text-lg font-medium mb-2">Description</h3>
@@ -182,10 +200,7 @@ const Ticket = () => {
                 <h3 className="text-lg font-medium mb-3">Related Skills</h3>
                 <div className="flex flex-wrap gap-2">
                   {ticket.relatedSkills.map((skill, index) => (
-                    <span
-                      key={index}
-                      className="badge badge-outline"
-                    >
+                    <span key={index} className="badge badge-outline">
                       {skill}
                     </span>
                   ))}
@@ -212,22 +227,24 @@ const Ticket = () => {
             <div className="bg-base-100 rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-medium mb-4">Assignment</h3>
               <div className="space-y-3">
-                <div>
-                  <div className="text-sm text-base-content/60 mb-1">Created by</div>
-                  <div className="font-medium">{ticket.createdBy.name}</div>
-                  <div className="text-sm text-base-content/60">{ticket.createdBy.email}</div>
-                </div>
-                
                 {ticket.assignedTo ? (
                   <div>
-                    <div className="text-sm text-base-content/60 mb-1">Assigned to</div>
+                    <div className="text-sm text-base-content/60 mb-1">
+                      Assigned to
+                    </div>
                     <div className="font-medium">{ticket.assignedTo.name}</div>
-                    <div className="text-sm text-base-content/60">{ticket.assignedTo.email}</div>
+                    <div className="text-sm text-base-content/60">
+                      {ticket.assignedTo.email}
+                    </div>
                   </div>
                 ) : (
                   <div>
-                    <div className="text-sm text-base-content/60 mb-1">Assigned to</div>
-                    <div className="text-base-content/60 italic">Unassigned</div>
+                    <div className="text-sm text-base-content/60 mb-1">
+                      Assigned to
+                    </div>
+                    <div className="text-base-content/60 italic">
+                      Unassigned
+                    </div>
                   </div>
                 )}
               </div>
@@ -238,18 +255,24 @@ const Ticket = () => {
               <h3 className="text-lg font-medium mb-4">Timeline</h3>
               <div className="space-y-3">
                 <div>
-                  <div className="text-sm text-base-content/60 mb-1">Created</div>
+                  <div className="text-sm text-base-content/60 mb-1">
+                    Created
+                  </div>
                   <div className="text-sm">{formatDate(ticket.createdAt)}</div>
                 </div>
-                
+
                 <div>
-                  <div className="text-sm text-base-content/60 mb-1">Last updated</div>
+                  <div className="text-sm text-base-content/60 mb-1">
+                    Last updated
+                  </div>
                   <div className="text-sm">{formatDate(ticket.updatedAt)}</div>
                 </div>
-                
+
                 {ticket.deadline && (
                   <div>
-                    <div className="text-sm text-base-content/60 mb-1">Deadline</div>
+                    <div className="text-sm text-base-content/60 mb-1">
+                      Deadline
+                    </div>
                     <div className="text-sm font-medium text-warning">
                       {formatDate(ticket.deadline)}
                     </div>
@@ -262,13 +285,10 @@ const Ticket = () => {
             <div className="bg-base-100 rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-medium mb-4">Actions</h3>
               <div className="space-y-2">
-                <button className="btn btn-outline btn-sm w-full">
-                  Edit Ticket
-                </button>
-                <button className="btn btn-outline btn-sm w-full">
-                  Add Comment
-                </button>
-                <button className="btn btn-outline btn-sm w-full text-error">
+                <button
+                  className="btn btn-outline btn-sm w-full text-error"
+                  onClick={deleteTicket(ticket._id)}
+                >
                   Delete Ticket
                 </button>
               </div>

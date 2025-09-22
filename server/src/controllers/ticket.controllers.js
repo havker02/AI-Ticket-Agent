@@ -63,27 +63,36 @@ export const getTickets = async (req, res) => {
       return res.status(401).json({
         success: false,
         message: "Unauthorized",
-      })
+      });
     }
-    
+
     const page = parseInt(req.query.page) || 1;
     const limit = 50;
     const skip = (page - 1) * limit;
     let tickets;
-    
+
     if (user.role === "user") {
-      tickets = await Ticket.find({ createdBy: user.id }).sort({ createdAt: -1 }).skip(skip).limit(limit);
+      tickets = await Ticket.find({ createdBy: user.id })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate("createdBy");
     } else {
-      tickets = await Ticket.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+      tickets = await Ticket.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate("createdBy")
+        .populate("assignedTo");
     }
 
     if (!tickets || tickets.length === 0) {
       return res.status(404).json({
         success: false,
         message: "No tickets found",
-      })
+      });
     }
-    
+
     return res.status(200).json({
       success: true,
       message: "Tickets fetched successfully",
@@ -114,9 +123,14 @@ export const getTicket = async (req, res) => {
     let ticket;
 
     if (user.role === "user") {
-      ticket = await Ticket.findOne({ _id: ticketId, createdBy: user.id });
+      ticket = await Ticket.findOne({
+        _id: ticketId,
+        createdBy: user.id,
+      }).populate("assignedTo", "name");
     } else {
-      ticket = await Ticket.findById(ticketId);
+      ticket = await Ticket.findById(ticketId)
+        .populate("assignedTo", "name")
+        .populate("createdBy", "name email");
     }
 
     if (!ticket) {
@@ -133,6 +147,30 @@ export const getTicket = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Failed to get ticket:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const deleteTicket = async (req, res) => {
+  const ticketId = req.params.id;
+  try {
+    const ticket = await Ticket.findByIdAndDelete(ticketId);
+    if (!ticket) {
+      return res.status(404).json({
+        success: false,
+        message: "Ticket not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Ticket deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error while deleting ticket", error.message);
     return res.status(500).json({
       success: false,
       message: "Internal server error",
