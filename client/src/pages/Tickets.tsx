@@ -26,79 +26,16 @@ interface Ticket {
 }
 
 const Tickets = () => {
-  // Dummy data for user's own tickets only
-/*
-  const [tickets] = useState([
-    {
-      _id: "1",
-      title: "Login page not responsive on mobile",
-      description:
-        "The login form breaks on smaller screen sizes and buttons are not clickable.",
-      status: "opened",
-      createdBy: {
-        _id: "currentUser",
-        name: "John Doe",
-        email: "john@example.com",
-      },
-      priority: "high",
-      deadline: "2024-01-25",
-      helpfulNotes: "Check CSS media queries and button z-index",
-      relatedSkills: ["CSS", "Responsive Design", "Frontend"],
-      createdAt: "2024-01-18T10:30:00Z",
-      updatedAt: "2024-01-18T10:30:00Z",
-    },
-    {
-      _id: "2",
-      title: "Add dark mode toggle",
-      description:
-        "Users have requested a dark mode option for better viewing experience during night time.",
-      status: "resolved",
-      createdBy: {
-        _id: "currentUser",
-        name: "John Doe",
-        email: "john@example.com",
-      },
-      assignedTo: {
-        _id: "dev1",
-        name: "Alice Johnson",
-        email: "alice@example.com",
-      },
-      priority: "medium",
-      deadline: "2024-02-01",
-      relatedSkills: ["CSS", "JavaScript", "UI/UX"],
-      createdAt: "2024-01-16T11:45:00Z",
-      updatedAt: "2024-01-17T14:20:00Z",
-    },
-    {
-      _id: "3",
-      title: "Improve search functionality",
-      description:
-        "Search results are not accurate and take too long to load. Need better filtering options.",
-      status: "progress",
-      createdBy: {
-        _id: "currentUser",
-        name: "John Doe",
-        email: "john@example.com",
-      },
-      assignedTo: {
-        _id: "dev2",
-        name: "Bob Brown",
-        email: "bob@example.com",
-      },
-      priority: "low",
-      relatedSkills: ["Search", "Database", "Frontend"],
-      createdAt: "2024-01-12T13:25:00Z",
-      updatedAt: "2024-01-15T16:20:00Z",
-    },
-  ]);
-*/
   const [tickets, setTickets] = useState<Ticket[]>([]);
-  
+
   const fetchTickets = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/tickets`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/tickets`,
+        {
+          withCredentials: true,
+        },
+      );
       setTickets(res.data?.tickets);
     } catch (error) {
       console.error(error);
@@ -107,7 +44,7 @@ const Tickets = () => {
 
   useEffect(() => {
     fetchTickets();
-  }, [])
+  }, []);
 
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
@@ -153,7 +90,7 @@ const Tickets = () => {
 
     return matchesStatus && matchesPriority && matchesSearch;
   });
-console.log(tickets)
+  console.log(tickets);
   return (
     <div className="min-h-screen bg-base-200">
       {/* Header */}
@@ -198,12 +135,16 @@ console.log(tickets)
             <div className="stat-title">Total Tickets</div>
             <div className="stat-value text-primary">{tickets.length}</div>
           </div>
+
+          {/*
           <div className="stat bg-base-100 rounded-lg shadow-sm">
             <div className="stat-title">Open</div>
             <div className="stat-value text-error">
               {tickets.filter((t) => t.status === "open").length}
             </div>
           </div>
+          */}
+
           <div className="stat bg-base-100 rounded-lg shadow-sm">
             <div className="stat-title">In Progress</div>
             <div className="stat-value text-warning">
@@ -276,7 +217,7 @@ console.log(tickets)
                         {ticket.status === "open"
                           ? "Open"
                           : ticket.status === "in-progress"
-                            ? "In Progress"
+                            ? "Progress"
                             : "Resolved"}
                       </span>
                       <span className={getPriorityBadge(ticket.priority)}>
