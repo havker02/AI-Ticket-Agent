@@ -12,13 +12,12 @@ export const sendMail = async (to, subject, body) => {
       },
     });
 
-    const info = transporter.sendMail({
-      from: "AI Ticket",
+    await transporter.sendMail({
+      from: '"AI Ticket"<hello@demomailtrap.co>',
       to,
       subject,
-      body,
+      text: body,
     });
-    console.log("Message sent:", info.messageId);
   } catch (error) {
     console.error("❌ Error sending email:", error.message);
     throw error;
