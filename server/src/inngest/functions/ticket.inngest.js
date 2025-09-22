@@ -28,14 +28,17 @@ export const ticketCreated = inngest.createFunction(
         let ticketResolver = await User.findOne({
           role: "moderator",
           skills: {
-            $in: aiResponse.relatedSkills || [],
+            $elemMatch: {
+              $regex: aiResponse.relatedSkills.join("|"),
+              $options: "i",
+            }
           },
         });
 
         if (!ticketResolver) {
           ticketResolver = await User.findOne({ role: "admin" });
         }
-
+console.log(ticketResolver)
         await Ticket.findByIdAndUpdate(
           ticket._id,
           {
