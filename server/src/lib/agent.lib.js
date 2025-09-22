@@ -1,4 +1,4 @@
-import { createAgent, gemini } from "@inngest/agent-kit";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export const processTicket = async (ticket) => {
   try {
@@ -8,14 +8,10 @@ export const processTicket = async (ticket) => {
       throw new Error("❌ Gemini API key is not defined...!!");
     }
 
-    const ticketAgent = createAgent({
-      model: gemini({
-        model: "gemini-1.5-flash",
-        apiKey: geminiApiKey,
-      }),
+    const genAI = new GoogleGenerativeAI(geminiApiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      name: "Ticket Processor Assistant",
-      description: `You are an expert assistant that processes technical tickets and assigns them to the right moderator based on their role.
+    const prompt = `You are an expert assistant that processes technical tickets and assigns them to the right moderator based on their role.
 
 You must:
 - Analyze the ticket's title and description.
@@ -30,33 +26,48 @@ You must:
 
 Example response format:
 {
-  summary: "The user is facing an issue with the login page. The page is not loading and the user is unable to login.",
-  priority: "high",
-  helpfulNotes: "Check if CORS headers are set correctly and ensure you're hitting the correct login endpoint.",
-  relatedSkills: ["javascript", "react", "nodejs"]
-}`,
-    });
+  "summary": "The user is facing an issue with the login page. The page is not loading and the user is unable to login.",
+  "priority": "high",
+  "helpfulNotes": "Check if CORS headers are set correctly and ensure you're hitting the correct login endpoint.",
+  "relatedSkills": ["javascript", "react", "nodejs"]
+}
 
-    const response = await ticketAgent.run(`
-    Process the ticket and generate the following:
+Process the ticket and generate the following:
 - A short summary of the issue
 - A priority level: "low", "medium", or "high"
 - An array of required skills (e.g., ["javascript", "react", "python"])
 
 Ticket info:
 Title: ${ticket.title}
-Description: ${ticket.description}
-`);
-console.log(response)
-    const raw = response.output[0]?.context || response;
+Description: ${ticket.description}`;
 
-    const match = raw.match(/```json\s*([\s\S]*?)\s*```/i);
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
 
-    const jsonString = match ? match[1] : raw.trim();
+    console.log("AI Response:", text);
+
+    // Clean up the response to extract JSON
+    let jsonString = text.trim();
+
+    // Remove markdown code blocks if present
+    const match = jsonString.match(/```json\s*([\s\S]*?)\s*```/i);
+    if (match) {
+      jsonString = match[1];
+    } else if (jsonString.includes('```')) {
+      // Handle other code block formats
+      jsonString = jsonString.replace(/```[\s\S]*?\n/g, '').replace(/```/g, '');
+    }
 
     return JSON.parse(jsonString);
   } catch (error) {
     console.error("Error processing ticket", error.message);
-    return null;
+    // Return a fallback response if AI processing fails
+    return {
+      summary: `Support ticket: ${ticket.title}`,
+      priority: "medium",
+      helpfulNotes: "This ticket requires manual review by a moderator.",
+      relatedSkills: ["general"]
+    };
   }
 };
