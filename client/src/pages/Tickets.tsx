@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-/*
 interface Ticket {
   _id: string;
   title: string;
   description: string;
-  status: "opened" | "progress" | "resolved";
+  status: "open" | "in-progress" | "resolved";
   createdBy: {
     _id: string;
     name: string;
@@ -25,7 +24,6 @@ interface Ticket {
   createdAt: string;
   updatedAt: string;
 }
-*/
 
 const Tickets = () => {
   // Dummy data for user's own tickets only
@@ -94,7 +92,7 @@ const Tickets = () => {
     },
   ]);
 */
-  const [tickets, setTickets] = useState([]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   
   const fetchTickets = async () => {
     try {
@@ -117,8 +115,8 @@ const Tickets = () => {
 
   const getStatusBadge = (status: string) => {
     const statusClasses = {
-      opened: "badge-error",
-      progress: "badge-warning",
+      open: "badge-error",
+      "in-progress": "badge-warning",
       resolved: "badge-success",
     };
     return `badge ${statusClasses[status as keyof typeof statusClasses] || "badge-neutral"}`;
@@ -203,13 +201,13 @@ console.log(tickets)
           <div className="stat bg-base-100 rounded-lg shadow-sm">
             <div className="stat-title">Open</div>
             <div className="stat-value text-error">
-              {tickets.filter((t) => t.status === "opened").length}
+              {tickets.filter((t) => t.status === "open").length}
             </div>
           </div>
           <div className="stat bg-base-100 rounded-lg shadow-sm">
             <div className="stat-title">In Progress</div>
             <div className="stat-value text-warning">
-              {tickets.filter((t) => t.status === "resolved").length}
+              {tickets.filter((t) => t.status === "in-progress").length}
             </div>
           </div>
           <div className="stat bg-base-100 rounded-lg shadow-sm">
@@ -230,8 +228,8 @@ console.log(tickets)
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
                 <option value="all">All Status</option>
-                <option value="opened">Open</option>
-                <option value="progress">In Progress</option>
+                <option value="open">Open</option>
+                <option value="in-progress">In Progress</option>
                 <option value="resolved">Resolved</option>
               </select>
             </div>
@@ -275,11 +273,11 @@ console.log(tickets)
                         {ticket.title}
                       </h3>
                       <span className={getStatusBadge(ticket.status)}>
-                        {ticket.status === "opened"
-                          ? "Progress"
-                          : ticket.status === "resolved"
-                            ? "Resolved"
-                            : "Opened"}
+                        {ticket.status === "open"
+                          ? "Open"
+                          : ticket.status === "in-progress"
+                            ? "In Progress"
+                            : "Resolved"}
                       </span>
                       <span className={getPriorityBadge(ticket.priority)}>
                         {ticket.priority}
