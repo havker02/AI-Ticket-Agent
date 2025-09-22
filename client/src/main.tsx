@@ -51,7 +51,7 @@ createRoot(document.getElementById("root")!).render(
         />
 
         <Route
-          path="/:id"
+          path="/ticket/:id"
           element={
             <CheckAuth isProtected={true}>
               <Ticket />

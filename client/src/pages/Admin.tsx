@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -50,7 +49,7 @@ const Admin = () => {
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
-        }
+        },
       );
       setTickets(res.data?.tickets || []);
     } catch (error) {
@@ -70,7 +69,7 @@ const Admin = () => {
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
-        }
+        },
       );
       setUsers(res.data?.users || []);
     } catch (error) {
@@ -95,7 +94,7 @@ const Admin = () => {
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
-        }
+        },
       );
       fetchTickets();
     } catch (error) {
@@ -114,7 +113,7 @@ const Admin = () => {
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
-        }
+        },
       );
       fetchUsers();
     } catch (error) {
@@ -133,7 +132,7 @@ const Admin = () => {
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
-        }
+        },
       );
       fetchUsers();
       setEditingUser(null);
@@ -151,7 +150,9 @@ const Admin = () => {
   };
 
   const removeSkillFromUser = (user: User, skillToRemove: string) => {
-    const updatedSkills = user.skills.filter(skill => skill !== skillToRemove);
+    const updatedSkills = user.skills.filter(
+      (skill) => skill !== skillToRemove,
+    );
     updateUserSkills(user._id, updatedSkills);
   };
 
@@ -197,9 +198,6 @@ const Admin = () => {
                 Manage tickets, users, and system settings
               </p>
             </div>
-            <div className="flex gap-2">
-              <div className="badge badge-primary">Admin Panel</div>
-            </div>
           </div>
         </div>
       </div>
@@ -209,15 +207,13 @@ const Admin = () => {
         <div className="tabs tabs-boxed w-fit mb-6">
           <button
             className={`tab ${activeTab === "tickets" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("tickets")}
-          >
+            onClick={() => setActiveTab("tickets")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 mr-2"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+              stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -229,15 +225,13 @@ const Admin = () => {
           </button>
           <button
             className={`tab ${activeTab === "users" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("users")}
-          >
+            onClick={() => setActiveTab("users")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 mr-2"
               fill="none"
               viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+              stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -311,7 +305,9 @@ const Admin = () => {
                           </span>
                         </td>
                         <td>
-                          <span className={`badge ${ticket.priority === 'high' ? 'badge-error' : ticket.priority === 'medium' ? 'badge-warning' : 'badge-info'}`}>
+                          <span
+                            className={`badge ${ticket.priority === "high" ? "badge-error" : ticket.priority === "medium" ? "badge-warning" : "badge-info"}`}
+                          >
                             {ticket.priority}
                           </span>
                         </td>
@@ -320,7 +316,11 @@ const Admin = () => {
                         </td>
                         <td>
                           <div className="dropdown dropdown-end">
-                            <div tabIndex={0} role="button" className="btn btn-sm btn-ghost">
+                            <div
+                              tabIndex={0}
+                              role="button"
+                              className="btn btn-sm btn-ghost"
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-4 w-4"
@@ -336,10 +336,15 @@ const Admin = () => {
                                 />
                               </svg>
                             </div>
-                            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                            <ul
+                              tabIndex={0}
+                              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                            >
                               <li>
                                 <button
-                                  onClick={() => updateTicketStatus(ticket._id, "open")}
+                                  onClick={() =>
+                                    updateTicketStatus(ticket._id, "open")
+                                  }
                                   className="text-error"
                                 >
                                   Mark as Open
@@ -347,7 +352,12 @@ const Admin = () => {
                               </li>
                               <li>
                                 <button
-                                  onClick={() => updateTicketStatus(ticket._id, "in-progress")}
+                                  onClick={() =>
+                                    updateTicketStatus(
+                                      ticket._id,
+                                      "in-progress",
+                                    )
+                                  }
                                   className="text-warning"
                                 >
                                   Mark as In Progress
@@ -355,7 +365,9 @@ const Admin = () => {
                               </li>
                               <li>
                                 <button
-                                  onClick={() => updateTicketStatus(ticket._id, "resolved")}
+                                  onClick={() =>
+                                    updateTicketStatus(ticket._id, "resolved")
+                                  }
                                   className="text-success"
                                 >
                                   Mark as Resolved
@@ -444,13 +456,22 @@ const Admin = () => {
                         <td>
                           <div className="flex gap-2">
                             <div className="dropdown dropdown-end">
-                              <div tabIndex={0} role="button" className="btn btn-sm btn-outline">
+                              <div
+                                tabIndex={0}
+                                role="button"
+                                className="btn btn-sm btn-outline"
+                              >
                                 Role
                               </div>
-                              <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-32">
+                              <ul
+                                tabIndex={0}
+                                className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-32"
+                              >
                                 <li>
                                   <button
-                                    onClick={() => updateUserRole(user._id, "user")}
+                                    onClick={() =>
+                                      updateUserRole(user._id, "user")
+                                    }
                                     className="text-info"
                                   >
                                     User
@@ -458,7 +479,9 @@ const Admin = () => {
                                 </li>
                                 <li>
                                   <button
-                                    onClick={() => updateUserRole(user._id, "moderator")}
+                                    onClick={() =>
+                                      updateUserRole(user._id, "moderator")
+                                    }
                                     className="text-warning"
                                   >
                                     Moderator
@@ -466,7 +489,9 @@ const Admin = () => {
                                 </li>
                                 <li>
                                   <button
-                                    onClick={() => updateUserRole(user._id, "admin")}
+                                    onClick={() =>
+                                      updateUserRole(user._id, "admin")
+                                    }
                                     className="text-error"
                                   >
                                     Admin
@@ -499,18 +524,17 @@ const Admin = () => {
             <h3 className="font-bold text-lg mb-4">
               Manage Skills for {editingUser.name}
             </h3>
-            
+
             {/* Current Skills */}
             <div className="mb-4">
               <label className="label">
-                <span className="label-text font-semibold">Current Skills:</span>
+                <span className="label-text font-semibold">
+                  Current Skills:
+                </span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {editingUser.skills.map((skill, index) => (
-                  <div
-                    key={index}
-                    className="badge badge-outline gap-2"
-                  >
+                  <div key={index} className="badge badge-outline gap-2">
                     {skill}
                     <button
                       className="btn btn-ghost btn-xs p-0 h-4 w-4"
@@ -534,7 +558,9 @@ const Admin = () => {
                   </div>
                 ))}
                 {editingUser.skills.length === 0 && (
-                  <span className="text-base-content/60 italic">No skills assigned</span>
+                  <span className="text-base-content/60 italic">
+                    No skills assigned
+                  </span>
                 )}
               </div>
             </div>
