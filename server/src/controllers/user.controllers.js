@@ -217,3 +217,83 @@ export const currentUser = async (req, res) => {
     });
   }
 };
+
+export const updateUserRole = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      message: "Forbidden",
+    });
+  }
+
+  const userId = req.params.id;
+  const role = req.body.role;
+
+  if (!userId || !role) {
+    return res.status(400).json({
+      success: false,
+      message: "Provide userId and role",
+    });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(userId, {
+      role,
+    }, { new: true })
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "User role updated successfully",
+      user
+    })
+  } catch (error) {
+    console.error("Error updating user role:", error.message);
+  }
+};
+
+export const updateUserSkills = async (req, res) => {
+  const userId = req.params.id; // comes from /users/:id/skills
+  const { skills } = req.body;
+
+  // Validation for skills only
+  if (!userId || !skills || !Array.isArray(skills) || skills.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Provide userId and at least one skill",
+    });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { skills },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "User skills updated successfully",
+      user,
+    });
+  } catch (error) {
+    console.error("Error updating user skills:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};

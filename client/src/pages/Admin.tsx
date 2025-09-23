@@ -65,7 +65,7 @@ const Admin = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/users`,
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
@@ -103,12 +103,11 @@ const Admin = () => {
   // Update user role
   const updateUserRole = async (userId: string, role: string) => {
     try {
-      const token = localStorage.getItem("token");
+      
       await axios.patch(
         `${import.meta.env.VITE_BACKEND_URL}/api/users/${userId}/role`,
         { role },
         {
-          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         },
       );
@@ -122,12 +121,10 @@ const Admin = () => {
   // Update user skills
   const updateUserSkills = async (userId: string, skills: string[]) => {
     try {
-      const token = localStorage.getItem("token");
       await axios.patch(
         `${import.meta.env.VITE_BACKEND_URL}/api/users/${userId}/skills`,
         { skills },
         {
-          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         },
       );
@@ -553,7 +550,7 @@ const Admin = () => {
                   placeholder="Enter skill name..."
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
-                  onKeyPress={(e) => {
+                  onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       addSkillToUser(editingUser, newSkill);
                       setNewSkill("");
